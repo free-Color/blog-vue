@@ -1,0 +1,108 @@
+<template>
+<div>
+  <el-card class="div-blogs"><el-divider/>
+    <div v-for="blog in blogs" :key="blog">
+      <router-link :to="'/blog/' + blog.blogId" style="color: black">
+        <h2>{{blog.blogTitle}}</h2>
+      </router-link>
+      <el-container>
+        <el-aside width="110px">
+           <el-image style="width: 100px; height: 100px" :src="blog.users.userAvatarAddress" :fit="fit"/>
+          <span>{{blog.users.userAvatarAddress}}</span>
+        </el-aside>
+        <el-main>
+          <span>{{blog.blogSummary}}</span>
+        </el-main>
+      </el-container>
+      <el-row :gutter="20">
+        <el-col :span="6">{{blog.users.userNickname}}</el-col>
+        <el-col :span="10">{{blog.createTime | dateFormat}}</el-col>
+        <el-col :span="2">
+          <i class="el-icon-sunrise-1"/>{{blog.blogStatistics.admireCount}}
+        </el-col>
+        <el-col :span="2">
+          <i class="el-icon-chat-dot-square"/>{{blog.blogStatistics.commentCount}}
+        </el-col>
+        <el-col :span="2">
+          <i class="el-icon-star-off"/>{{blog.blogStatistics.collectCount}}
+        </el-col>
+        <el-col :span="2">
+          <i class="el-icon-view"/>{{blog.blogStatistics.viewCount}}
+        </el-col>
+        <el-divider/>
+      </el-row>
+    </div>
+    <div class="div-center" style="margin: 20px 0 0">
+      <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page.sync="page.currentPage"
+        :page-sizes="[10, 20, 30, 40]"
+        :page-size="page.limit"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="page.total">
+      </el-pagination>
+    </div>
+  </el-card>
+</div>
+</template>
+
+<script>
+export default {
+  data () {
+    return {
+      blogs: [],
+      page: {
+        currentPage: 1,
+        limit: 10,
+        total: 100
+      }
+    }
+  },
+  methods: {
+      getPage () {
+        this.$axios({
+          method: 'get',
+          url: '/blog/findByViewCount',
+          params: {
+            limit: this.page.limit,
+            page: this.page.currentPage
+          }
+        }).then(res => {
+          this.blogs = res.data.data.rows
+          this.page.total = res.data.data.count
+          for (const blog in this.blogs) {
+            if(blog.users.userAvatarAddress != null)
+              blog.users.userAvatarAddress =
+                this.$image + blog.users.userAvatarAddress
+          }
+          this.$message(JSON.stringify(this.blogs[0].users.userAvatarAddress))
+        })
+      },
+      handleCurrentChange(page){
+        // this.$message(JSON.stringify(page))
+        this.page.currentPage = page
+        this.getPage()
+      },
+      handleSizeChange(val){
+        // this.$message(JSON.stringify(val))
+        this.page.currentPage = 1
+        this.page.limit = val
+        this.getPage()
+      }
+  },
+  created () {
+    this.getPage()
+  }
+}
+</script>
+
+<style scoped>
+.div-blogs{
+  width: 1000px;
+  margin: auto;
+}
+a{
+  text-decoration: none;
+}
+</style>
