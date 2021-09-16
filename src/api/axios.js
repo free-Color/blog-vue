@@ -1,9 +1,8 @@
 
 import axios from 'axios'
 import ElementUI from 'element-ui'
-import 'element-ui/lib/theme-chalk/index.css'
 
-axios.defaults.timeout = 5000
+axios.defaults.timeout = 10000
 axios.defaults.baseURL = 'http://172.29.3.43:8080'
 axios.defaults.headers.post['Content-Type'] = 'application/json;charset=UTF-8'
 
@@ -13,14 +12,16 @@ axios.interceptors.request.use((config) => {
     }
     return config
 },(error) => {
-    ElementUI.Message.error(error)
+    ElementUI.Message.error(error.message)
 })
 
 axios.interceptors.response.use((response) => {
     if(response.data.code == 200) return response
     else ElementUI.Message.error(response.data.msg)
 },(error) => {
-    ElementUI.Message(error)
+    if(error.message.includes('timeout')){
+        ElementUI.Message.error('请求超时，请稍后重试')
+    }else ElementUI.Message.error(error.message)
 })
 
 export default axios

@@ -47,8 +47,8 @@ export default new Router({
         path: '/admin/map',
         component: () => import('@/views/admin/charts/china')
       },{
-        path: '/admin/mix',
-        component: () => import('@/views/admin/charts/mix-chart')
+        path: '/admin/analyse',
+        component: () => import('@/views/admin/charts/analyse')
       },{
         path: '/admin/china',
         component: () => import('@/views/admin/charts/china')
