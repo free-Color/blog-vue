@@ -158,7 +158,7 @@ export default {
       months: {},
       days: {},
       index: {
-        year: '',
+        year: '2021',
         month: '1',
         day: '1'
       },
@@ -191,37 +191,71 @@ export default {
       })
       this.chart.on('click', param => {
         if(this.mode === 0) this.setMonth(JSON.stringify(param.dataIndex + 1))
-        else if(this.mode === 1) this.setDay(JSON.stringify(param.dataIndex))
+        else if(this.mode === 1) this.setDay(JSON.stringify(
+            this.months[this.index.month][param.dataIndex].name
+        ))
       })
+      this.chart.setOption(this.option)
       this.setYear()
+      for(let i = 0; i < 24; i++)
+        this.axis.day.push(i)
     },
     setYear(){
+      this.mode = 0
       if(this.year == null){
-        this.year = [1,2,3,4,5,10,0,4]
+        this.$axios.get('/log/findYear', {
+          params: {
+            year: this.index.year
+          }
+        }).then(res => {
+          this.year = res.data.data
+          // this.year = res.data.data.map(item => item.value)
+          // this.$message(JSON.stringify(this.year))
+          if(this.axis.year.length !== 12){
+            for (let i = 1; i < 13; i++) {
+              this.axis.year.push(i)
+            }
+          }
+          this.option.xAxis[0].data = this.axis.year
+          this.option.series[0].data = this.year.map(item => item.value)
+          this.option.title.text = '用户访问时间分析\t' + this.index.year + '年'
+          this.chart.setOption(this.option)
+        })
+      }else {
+        this.option.xAxis[0].data = this.axis.year
+        this.option.series[0].data = this.year.map(item => item.value)
+        this.option.title.text = '用户访问时间分析\t' + this.index.year + '年'
+        this.chart.setOption(this.option)
       }
-      if(this.axis.year.length !== 12){
-        for (let i = 1; i < 13; i++) {
-          this.axis.year.push(i)
-        }
-      }
-      this.option.series[0].data = this.year
-      this.option.xAxis[0].data = this.axis.year
-      this.chart.setOption(this.option)
     },
     setMonth(index){
       this.mode = 1
       this.index.month = index
       if(this.months[index] == undefined){
-        this.months[index] = [1,2,3,4,5,10,0,4,0,0,0,0,3,6,8,1]
+        this.$axios.get('/log/findMouth', {
+          params: {
+            mouth: this.index.month,
+            year: this.index.year
+          }
+        }).then(res => {
+          var val = res.data.data
+          val.forEach(item => item.name = parseInt(item.name))
+          val.sort((a, b) => a.name - b.name)
+          this.months[index] = val
+
+          this.option.series[0].data = this.months[index].map(item => item.value)
+          this.option.xAxis[0].data = this.months[index].map(item => item.name)
+          // this.$message(JSON.stringify(this.option.xAxis[0].data))
+          this.option.title.text = '用户访问时间分析\t' + this.index.year + '年' + index + '月'
+          this.chart.setOption(this.option)
+        })
+      }else {
+        // this.$message(JSON.stringify(this.months[index]))
+        this.option.series[0].data = this.months[index].map(item => item.value)
+        this.option.xAxis[0].data = this.months[index].map(item => item.name)
+        this.option.title.text = '用户访问时间分析\t' + this.index.year + '年' + index + '月'
+        this.chart.setOption(this.option)
       }
-      if(this.axis.month.length !== 31){
-        for (let i = 1; i < 32; i++) {
-          this.axis.month.push(i)
-        }
-      }
-      this.option.series[0].data = this.months[index]
-      this.option.xAxis[0].data = this.axis.month
-      this.chart.setOption(this.option)
     },
     setDay(index){
       // this.$message(JSON.stringify(2))
@@ -231,17 +265,33 @@ export default {
         this.days[this.index.month] = {}
       }
       if(this.days[this.index.month][index] == undefined){
-        this.days[this.index.month][index] = []
-        this.days[this.index.month][index] = [1,2,3,4,5,10,0,4]
+        this.$axios.get('/log/findDay',  {
+          params: {
+            day: this.index.day,
+            year: this.index.year,
+            mouth: this.index.month
+          }
+        }).then(res => {
+          var val = res.data.data
+          this.days[this.index.month][index] = []
+          for(let i = 0; i < 24; i++)
+            this.days[this.index.month][index].push(0)
+          val.forEach(item => {
+            item.name = parseInt(item.name)
+            this.days[this.index.month][index][item.name] = item.value
+          })
+          // this.$message(JSON.stringify(this.days[this.index.month][index]))
+          this.option.series[0].data = this.days[this.index.month][index]
+          this.option.xAxis[0].data = this.axis.day
+          this.option.title.text = '用户访问时间分析\t' + this.index.year + '年' + this.index.month + '月' + index + '日'
+          this.chart.setOption(this.option)
+        })
+      }else {
+        this.option.series[0].data = this.days[this.index.month][index]
+        this.option.xAxis[0].data = this.axis.day
+        this.option.title.text = '用户访问时间分析\t' + this.index.year + '年' + this.index.month + '月' + index + '日'
+        this.chart.setOption(this.option)
       }
-      if(this.axis.day.length !== 24){
-        for (let i = 1; i < 24; i++) {
-          this.axis.day.push(i)
-        }
-      }
-      this.option.series[0].data = this.days[this.index.month][index]
-      this.option.xAxis[0].data = this.axis.day
-      this.chart.setOption(this.option)
     },
   }
 }
