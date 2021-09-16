@@ -79,9 +79,6 @@ export default new Router({
         path: '/main',
         component: () => import('@/views/main/main')
       }, {
-        path: '/search',
-        component: () => import('@/views/main/search')
-      }, {
         path: '/editor',
         name: 'editor',
         component: () => import('@/views/main/editor'),

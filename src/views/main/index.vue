@@ -7,7 +7,8 @@
       class="el-menu-demo" mode="horizontal" @select="handleSelect"
       background-color="#545c64" text-color="#fff" active-text-color="#ffd04b">
       <el-menu-item>
-        <el-input placeholder="请输入内容" v-model="input" prefix-icon="el-icon-search"></el-input>
+        <el-input placeholder="请输入内容" v-model="input" prefix-icon="el-icon-search"
+            @keyup.enter.native="search"></el-input>
       </el-menu-item>
       <el-menu-item index="/editor">新随笔</el-menu-item>
 
@@ -31,6 +32,7 @@
 </template>
 
 <script>
+import handler from "@/utils/handler";
 export default{
   data () {
     return {
@@ -42,6 +44,9 @@ export default{
   methods: {
     goBack () {
       this.$router.push('/main')
+    },
+    search(){
+      handler.$emit('search', this.input)
     }
   },
   created () {

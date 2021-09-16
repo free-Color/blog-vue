@@ -18,7 +18,7 @@
         <el-col :span="6">{{blog.users.userNickname}}</el-col>
         <el-col :span="10">{{blog.createTime | dateFormat}}</el-col>
         <el-col :span="2">
-          <i class="el-icon-sunrise-1"/>{{blog.blogStatistics.admireCount}}
+          <i class="iconfont icon-dianzan1"/>{{blog.blogStatistics.admireCount}}
         </el-col>
         <el-col :span="2">
           <i class="el-icon-chat-dot-square"/>{{blog.blogStatistics.commentCount}}
@@ -48,10 +48,13 @@
 </template>
 
 <script>
+import handler from "@/utils/handler";
+
 export default {
   data () {
     return {
       blogs: [],
+      blogTitle: '',
       page: {
         currentPage: 1,
         limit: 10,
@@ -76,23 +79,50 @@ export default {
               blog.users.userAvatarAddress =
                 this.$image + blog.users.userAvatarAddress
           }
-          this.$message(JSON.stringify(this.blogs[0].users.userAvatarAddress))
+          // this.$message(JSON.stringify(this.blogs[0].users.userAvatarAddress))
+        })
+      },
+      findByBlogTitle(title){
+        this.$axios({
+          method: 'get',
+          url: '/blog/findByBlogTitle',
+          params: {
+            blogTitle: title,
+            limit: this.page.limit,
+            page: this.page.currentPage
+          }
+        }).then(res => {
+          this.blogs = res.data.data.rows
+          this.page.total = res.data.data.count
+          for (const blog in this.blogs) {
+            if(blog.users.userAvatarAddress != null)
+              blog.users.userAvatarAddress =
+                  this.$image + blog.users.userAvatarAddress
+          }
         })
       },
       handleCurrentChange(page){
-        // this.$message(JSON.stringify(page))
         this.page.currentPage = page
-        this.getPage()
+        if(this.blogTitle === '') this.getPage()
+        else this.findByBlogTitle(this.blogTitle)
       },
       handleSizeChange(val){
-        // this.$message(JSON.stringify(val))
         this.page.currentPage = 1
         this.page.limit = val
-        this.getPage()
+        if(this.blogTitle === '') this.getPage()
+        else this.findByBlogTitle(this.blogTitle)
       }
   },
   created () {
     this.getPage()
+  },
+  mounted() {
+    handler.$on('search', msg => {
+      // this.$message(msg)
+      this.blogTitle = msg
+      if(this.blogTitle === '') this.getPage()
+      else this.findByBlogTitle(this.blogTitle)
+    })
   }
 }
 </script>
