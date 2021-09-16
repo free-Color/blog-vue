@@ -7,8 +7,9 @@
       </router-link>
       <el-container>
         <el-aside width="110px">
-           <el-image style="width: 100px; height: 100px" :src="blog.users.userAvatarAddress" :fit="fit"/>
-          <span>{{blog.users.userAvatarAddress}}</span>
+           <el-avatar style="width: 100px; height: 100px" :src="$image+blog.users.userAvatarAddress"
+              shape="square" size="large"/>
+<!--          <span>{{$image+blog.users.userAvatarAddress}}</span>-->
         </el-aside>
         <el-main>
           <span>{{blog.blogSummary}}</span>
@@ -74,11 +75,17 @@ export default {
         }).then(res => {
           this.blogs = res.data.data.rows
           this.page.total = res.data.data.count
-          for (const blog in this.blogs) {
-            if(blog.users.userAvatarAddress != null)
-              blog.users.userAvatarAddress =
-                this.$image + blog.users.userAvatarAddress
-          }
+          // this.blogs[0].users.userAvatarAddress =
+          //     this.$image + this.blogs[0].users.userAvatarAddress
+          // // this.$message(JSON.stringify(this.blogs[1].users.userAvatarAddress))
+          // var blog
+          // for (blog in this.blogs) {
+          //   this.$message(JSON.stringify(blog.users.userAvatarAddress))
+          //   if(blog.users.userAvatarAddress !== null)
+          //     blog.users.userAvatarAddress =
+          //       this.$image + blog.users.userAvatarAddress
+          // }
+          // this.$message(JSON.stringify(this.blogs[0].users.userAvatarAddress))
           // this.$message(JSON.stringify(this.blogs[0].users.userAvatarAddress))
         })
       },
@@ -94,7 +101,7 @@ export default {
         }).then(res => {
           this.blogs = res.data.data.rows
           this.page.total = res.data.data.count
-          for (const blog in this.blogs) {
+          for (let blog in this.blogs) {
             if(blog.users.userAvatarAddress != null)
               blog.users.userAvatarAddress =
                   this.$image + blog.users.userAvatarAddress

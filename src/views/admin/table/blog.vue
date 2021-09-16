@@ -2,7 +2,7 @@
 <el-card>
   <el-form :inline="true">
     <el-form-item label="博客标题:">
-      <el-input v-model="form.title" placeholder="审批人"></el-input>
+      <el-input v-model="form.title" placeholder="博客标题"></el-input>
     </el-form-item>
     <el-form-item>
       <el-button type="primary" @click="onSubmit">查询</el-button>
@@ -13,7 +13,7 @@
       <el-table-column type="selection" width="55"/>
       <el-table-column prop="blogTitle" label="标题" width="250"/>
       <el-table-column prop="blogSummary" label="描述" width="180"/>
-      
+
       <el-table-column prop="blogDeleted" label="状态" width="180">
         <template slot-scope="scope">
           <el-tag v-if="scope.row.blogDeleted == 1" type="danger">封禁</el-tag>
@@ -26,7 +26,7 @@
         </template>
       </el-table-column>
   </el-table>
-  
+
     <div class="div-center" style="margin: 20px 0 0">
       <el-pagination
         background
@@ -75,16 +75,33 @@ export default {
         this.page.total = res.data.data.total
       })
     },
+    onSubmit(){
+      if(this.form.title === '')this.refreshPage()
+      else {
+        // this.$message(this.form.title)
+        this.$axios({
+          method: 'get',
+          url: '/blog/findByBlogTitle',
+          params: {
+            page: this.page.currentPage,
+            limit: this.page.limit,
+            blogTitle: this.form.title
+          }
+        }).then(res => {
+          this.data = res.data.data.rows
+          this.page.total = res.data.data.total
+        })
+      }
+    },
     handleSelectionChange(val){
-      // this.$message(JSON.stringify(val))
       this.selection = val
     },
     handleClick (val) {
-      this.$message(JSON.stringify(val))
+      // this.$message(JSON.stringify(val))
       this.$router.push('/blog/' + val)
     },
     handleCurrentChange(page){
-      this.$message(JSON.stringify(page))
+      // this.$message(JSON.stringify(page))
       this.page.currentPage = page
       this.refreshPage()
     },

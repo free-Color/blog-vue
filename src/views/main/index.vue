@@ -14,7 +14,7 @@
 
       <el-submenu v-if="userInfo!==null">
         <template slot="title">
-          <el-avatar size="medium" :src="userInfo.userAvatarAddress"/>
+          <el-avatar size="medium" :src="$image + userInfo.userAvatarAddress"/>
         </template>
         <el-menu-item index="/sittings">个人中心</el-menu-item>
         <el-menu-item index="/admin" v-if="userInfo.roleId == 1">后台管理</el-menu-item>

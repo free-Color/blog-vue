@@ -19,7 +19,7 @@ export default {
       data: [
         {
           name: "南海诸岛",
-          value: 100,
+          value: 0,
           eventTotal:100,
           specialImportant:10,
           import:10,
@@ -29,111 +29,111 @@ export default {
         },
         {
           name: "北京",
-          value: 1000
+          value: 0
         },
         {
           name: "天津",
-          value: 130
+          value: 0
         },
         {
           name: "上海",
-          value: 400
+          value: 0
         },
         {
           name: "重庆",
-          value: 750
+          value: 0
         },
         {
           name: "河北",
-          value: 130
+          value: 0
         },
         {
           name: "河南",
-          value: 830
+          value: 0
         },
         {
           name: "云南",
-          value: 110
+          value: 0
         },
         {
           name: "辽宁",
-          value: 19
+          value: 0
         },
         {
           name: "黑龙江",
-          value: 150
+          value: 0
         },
         {
           name: "湖南",
-          value: 690
+          value: 0
         },
         {
           name: "安徽",
-          value: 60
+          value: 0
         },
         {
           name: "山东",
-          value: 39
+          value: 0
         },
         {
           name: "新疆",
-          value: 3
+          value: 0
         },
         {
           name: "江苏",
-          value: 31
+          value: 0
         },
         {
           name: "浙江",
-          value: 104
+          value: 0
         },
         {
           name: "江西",
-          value: 36
+          value: 0
         },
         {
           name: "湖北",
-          value: 52
+          value: 0
         },
         {
           name: "广西",
-          value: 33
+          value: 0
         },
         {
           name: "甘肃",
-          value: 7
+          value: 0
         },
         {
           name: "山西",
-          value: 5
+          value: 0
         },
         {
           name: "内蒙古",
-          value: 778
+          value: 0
         },
         {
           name: "陕西",
-          value: 22
+          value: 0
         },
         {
           name: "吉林",
-          value: 4
+          value: 0
         },
         {
           name: "福建",
-          value: 18
+          value: 0
         },
         {
           name: "贵州",
-          value: 5
+          value: 0
         },
         {
           name: "广东",
-          value: 98
+          value: 0
         },
         {
           name: "青海",
-          value: 1
+          value: 0
         },
         {
           name: "西藏",
@@ -141,27 +141,27 @@ export default {
         },
         {
           name: "四川",
-          value: 44
+          value: 0
         },
         {
           name: "宁夏",
-          value: 4
+          value: 0
         },
         {
           name: "海南",
-          value: 22
+          value: 0
         },
         {
           name: "台湾",
-          value: 3
+          value: 0
         },
         {
           name: "香港",
-          value: 5
+          value: 0
         },
         {
           name: "澳门",
-          value: 555
+          value: 0
         }
       ]
     };
@@ -332,9 +332,18 @@ export default {
       else if(value >= 500) color = "#3c57ce"
       else if(value >= 100) color = "#6f83db"
       return {value: value, itemStyle: {color: color}}
+    },
+    getData(){
+      this.$axios({
+        method: 'get',
+        url: '/log/findIp'
+      }).then(res => {
+        res.data.data
+      })
     }
   },
   created() {
+
   },
   mounted() {
     this.$nextTick(() => {

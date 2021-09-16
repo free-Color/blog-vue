@@ -65,7 +65,7 @@ export default {
         }else if(val == '0'){
           this.$message.error('用户名输入错误')
         }else{
-          val.userAvatarAddress = this.$image + val.userAvatarAddress
+          // val.userAvatarAddress = this.$image + val.userAvatarAddress
           sessionStorage.setItem('userInfo', JSON.stringify(res.data.data))
           sessionStorage.setItem('userId',res.data.data.userId)
           this.$message.success('登陆成功')
