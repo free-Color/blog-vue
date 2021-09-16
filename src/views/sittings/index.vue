@@ -8,7 +8,7 @@
 <el-aside width="160px">
   <el-menu router class="el-menu-demo" @select="handleSelect"
     background-color="#545c64" text-color="#E4E7ED" active-text-color="#ffd04b">
-    <el-menu-item index="/sittings/accout">
+    <el-menu-item index="/sittings/account">
       <i class="el-icon-setting"/>账户设置
     </el-menu-item>
     <el-menu-item index="/sittings/user">
@@ -22,6 +22,7 @@
         <i class="el-icon-s-order"/>列表管理
       </template>
       <el-menu-item index="/sittings/blog">我的博客</el-menu-item>
+      <el-menu-item index="/sittings/collect">我的收藏</el-menu-item>
       <el-menu-item index="/sittings/concern">我的关注</el-menu-item>
     </el-submenu>
   </el-menu>

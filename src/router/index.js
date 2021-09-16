@@ -41,9 +41,6 @@ export default new Router({
         path: '/admin/blog',
         component: () => import('@/views/admin/table/blog')
       },{
-        path: '/admin/echarts',
-        component: () => import('@/views/admin/charts/echarts')
-      },{
         path: '/admin/map',
         component: () => import('@/views/admin/charts/china')
       },{
@@ -96,22 +93,22 @@ export default new Router({
       name: 'sittings',
       component: () => import('@/views/sittings'),
       meta: { requireAuth: true },
-      redirect: '/sittings/accout',
+      redirect: '/sittings/account',
       children: [{
-        path: '/sittings/accout',
-        name: 'account',
-        component: () => import('@/views/sittings/accout')
+        path: '/sittings/account',
+        component: () => import('@/views/sittings/account')
       }, {
         path: '/sittings/block',
-        name: '博客详情',
         component: () => import('@/views/sittings/block')
       }, {
         path: '/sittings/user',
-        name: '欢迎组件',
         component: () => import('@/views/sittings/user')
       },{
         path: '/sittings/concern',
         component: () => import('@/views/sittings/concern')
+      }, {
+        path: '/sittings/collect',
+        component: () => import('@/views/sittings/collection')
       }, {
         path: '/sittings/blog',
         component: () => import('@/views/sittings/blog')

@@ -12,6 +12,7 @@ import moment from 'moment'
 import router from './router'
 import axios from '@/api/axios'
 import ElementUI from 'element-ui'
+import * as echarts from "echarts";
 
 import mavonEditor from 'mavon-editor'
 
@@ -21,6 +22,7 @@ let Markdown = require('markdown-it')
 
 Vue.prototype.$axios = axios
 Vue.prototype.$markdown = new Markdown()
+Vue.prototype.$echarts = echarts
 Vue.prototype.$image = axios.defaults.baseURL + '/static/userImage/uploadPictureFile/'
 
 Vue.config.productionTip = false

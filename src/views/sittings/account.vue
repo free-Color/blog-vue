@@ -166,11 +166,13 @@ export default {
           userPassword: this.form.password.now
         }
       }).then(res => {
-        if(!res.data.data){
-          this.$message.warning('密码输入错误')
+        if(res.data.data == '-1'){
+          this.$message.error('密码错误')
+          return
+        }else if(res.data.data == '0'){
+          this.$message.error('用户名不存在')
+          return;
         }
-        this.$message(JSON.stringify(res.data.data))
-        return
       })
       this.$axios({
         method: 'put',
@@ -180,9 +182,8 @@ export default {
           userPassword: this.form.password.input
         }
       }).then(res => {
-        if(res.data.data){
+        if(res.data.data == true)
           this.$message.success('更改密码成功')
-        }
       })
     },
     updateN () {
@@ -194,7 +195,8 @@ export default {
           userNickname: this.form.nickname
         }
       }).then(res => {
-        this.$message.success('更改昵称成功')
+        if(res.data.data == true)
+          this.$message.success('更改昵称成功')
       })
     },
     updateE () {

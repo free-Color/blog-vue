@@ -3,7 +3,7 @@ import axios from 'axios'
 import ElementUI from 'element-ui'
 
 axios.defaults.timeout = 10000
-axios.defaults.baseURL = 'http://172.29.3.43:8080'
+axios.defaults.baseURL = 'http://8.130.170.235'
 axios.defaults.headers.post['Content-Type'] = 'application/json;charset=UTF-8'
 
 axios.interceptors.request.use((config) => {
