@@ -3,9 +3,6 @@
 </template>
 
 <script>
-
-import {param} from "@/utils";
-
 export default {
   props: {
     className: {
@@ -67,7 +64,7 @@ export default {
           textStyle: {
             color: '#90979c'
           },
-          data: ['female', 'male', 'average']
+          data: ['average']
         },
         calculable: true,
         xAxis: [{

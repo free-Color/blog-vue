@@ -11,14 +11,15 @@
   <div style="width: 100%"><div class="div-center" @selection-change="handleSelectionChange">
     <el-table :data="data" height="500" style="width: 100%">
       <el-table-column type="selection" width="55"/>
-      <el-table-column prop="userNickname" label="昵称" width="180"/>
-      <el-table-column prop="userState" label="状态" width="180">
+      <el-table-column prop="userNickname" label="昵称" width="180" align="center"/>
+      <el-table-column prop="userProfile" label="个人简介" width="180"/>
+      <el-table-column prop="userState" label="状态" width="180" align="center">
         <template slot-scope="scope">
           <el-tag v-if="scope.row.userState === 1" type="danger">未激活</el-tag>
           <el-tag v-if="scope.row.userState === 0" type="success">已激活</el-tag>
         </template>
       </el-table-column>
-      <el-table-column prop="userRole.roleName" label="角色" width="180">
+      <el-table-column prop="userRole.roleName" label="角色" width="180" align="center">
         <template slot-scope="scope">
           <el-tag :type="tags.type[scope.row.roleId]">{{tags.role[scope.row.roleId]}}</el-tag>
         </template>
@@ -28,7 +29,7 @@
   <div class="div-center" style="margin: 20px 0 0">
     <el-button type="danger" @click="prohibit" plain>封禁用户</el-button>
   </div>
-    
+
     <div class="div-center" style="margin: 20px 0 0">
       <el-pagination
         background

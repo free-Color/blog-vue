@@ -25,6 +25,7 @@ export default new Router({
     {
       path: '/admin',
       component: () => import('@/views/admin'),
+      redirect: '/admin/analyse',
       beforeEnter: (to, from, next) => {
         next()
         // if(JSON.parse(sessionStorage.getItem('userInfo')).roleId=='1')next()
@@ -113,33 +114,6 @@ export default new Router({
         path: '/sittings/blog',
         component: () => import('@/views/sittings/blog')
       }]
-    },
-
-    {
-      path: '/user',
-      component: () => import('@/views/user'),
-      children: [{
-        path: '/user/blog',
-        component: () => import('@/views/user/blog')
-      },{
-        path: '/user/concern',
-        component: () => import('@/views/user/concern')
-      },{
-        path: '/user/tag',
-        component: () => import('@/views/user/tag')
-      },{
-        path: '/user/collection',
-        component: () => import('@/views/user/collection')
-      }]
-    },
-
-    // {
-    //   path: '*',
-    //   redirect: '/404'
-    // },
-    // {
-    //   path: '/404',
-    //   component: () => import('@/views/error-page/404')
-    // }
+    }
   ]
 })

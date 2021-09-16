@@ -10,113 +10,13 @@ import 'echarts4/map/js/china.js'
 export default {
   data() {
     return {
+      echarts: null,
       //echart 配制option
-      options: {
-        tooltip: {
-          triggerOn: "mousemove",   //mousemove、click
-          padding:8,
-          borderWidth:1,
-          borderColor:'#409eff',
-          backgroundColor:'rgba(255,255,255,0.7)',
-          textStyle:{
-            color:'#000000',
-            fontSize:13
-          },
-          formatter: (e, t, n) => {
-            let data = e.data;
-            //模拟数据
-            data.specialImportant = Math.random()*1000 | 0;
-            data.import = Math.random()*1000 | 0;
-            data.compare = Math.random()*1000 | 0;
-            data.common = Math.random()*1000 | 0;
-            data.specail = Math.random()*1000 | 0;
-
-            return `
-               <div>
-                 <p><b style="font-size:15px;">${data.name}</b>(2020年第一季度)</p>
-                 <p class="tooltip_style"><span class="tooltip_left">事件总数</span><span class="tooltip_right">${data.value}</span></p>
-                 <p class="tooltip_style"><span class="tooltip_left">特别重大事件</span><span class="tooltip_right">${data.specialImportant}</span></p>
-                 <p class="tooltip_style"><span class="tooltip_left">重大事件</span><span class="tooltip_right">${data.import}</span></p>
-                 <p class="tooltip_style"><span class="tooltip_left">较大事件</span><span class="tooltip_right">${data.compare}</span></p>
-                 <p class="tooltip_style"><span class="tooltip_left">一般事件</span><span class="tooltip_right">${data.common}</span></p>
-                 <p class="tooltip_style"><span class="tooltip_left">特写事件</span><span class="tooltip_right">${data.specail}</span></p>
-               </div>`
-          }
-        },
-        visualMap: {
-          show:true,
-          left: 26,
-          bottom: 40,
-          showLabel:true,
-          pieces: [
-            {
-              gte: 100,
-              label: ">= 1000",
-              color: "#1f307b"
-            },
-            {
-              gte: 500,
-              lt: 999,
-              label: "500 - 999",
-              color: "#3c57ce"
-            },
-            {
-              gte: 100,
-              lt:499,
-              label: "100 - 499",
-              color: "#6f83db"
-            },
-            {
-              gte: 10,
-              lt: 99,
-              label: "10 - 99",
-              color: "#9face7"
-            },
-            {
-              lt:10,
-              label:'<10',
-              color: "#bcc5ee"
-            }
-          ]
-        },
-        geo: {
-          map: "china",
-          scaleLimit: {
-            min: 1,
-            max: 2
-          },
-          zoom: 1,
-          top: 120,
-          label: {
-            normal: {
-              show:true,
-              fontSize: "14",
-              color: "rgba(0,0,0,0.7)"
-            }
-          },
-          itemStyle: {
-            normal: {
-              //shadowBlur: 50,
-              //shadowColor: 'rgba(0, 0, 0, 0.2)',
-              borderColor: "rgba(0, 0, 0, 0.2)"
-            },
-            emphasis: {
-              areaColor: "#f2d5ad",
-              shadowOffsetX: 0,
-              shadowOffsetY: 0,
-              borderWidth: 0
-            }
-          }
-        },
-        series: [{
-          name: "突发事件",
-          type: "map",
-          geoIndex: 0,
-          data:[]
-        }]
-      },
+      mapOptions: {},
+      barOptions: {},
+      currentOption: null,
       //echart data
-      dataList: [
+      data: [
         {
           name: "南海诸岛",
           value: 100,
@@ -129,7 +29,7 @@ export default {
         },
         {
           name: "北京",
-          value: 1000000
+          value: 1000
         },
         {
           name: "天津",
@@ -269,23 +169,185 @@ export default {
   methods: {
     //初始化中国地图
     initEchartMap() {
-      echarts.init(document.getElementById('china_map'))
-          .setOption(this.options)
+      this.echarts = echarts.init(document.getElementById('china_map'))
+      this.data.sort((a, b) => a.value - b.value)
+      this.mapOptions = {
+        tooltip: {
+          triggerOn: "mousemove",   //mousemove、click
+          padding:8,
+          borderWidth:1,
+          borderColor:'#409eff',
+          backgroundColor:'rgba(255,255,255,0.7)',
+          textStyle:{
+            color:'#000000',
+            fontSize:13
+          },
+          formatter: (e, t, n) => {
+            let data = e.data;
+            //模拟数据
+            data.specialImportant = Math.random()*1000 | 0;
+            data.import = Math.random()*1000 | 0;
+            data.compare = Math.random()*1000 | 0;
+            data.common = Math.random()*1000 | 0;
+            data.specail = Math.random()*1000 | 0;
+
+            return `
+               <div>
+                 <p><b style="font-size:15px;">${data.name}</b>(2020年第一季度)</p>
+                 <p class="tooltip_style"><span class="tooltip_left">事件总数</span><span class="tooltip_right">${data.value}</span></p>
+                 <p class="tooltip_style"><span class="tooltip_left">特别重大事件</span><span class="tooltip_right">${data.specialImportant}</span></p>
+                 <p class="tooltip_style"><span class="tooltip_left">重大事件</span><span class="tooltip_right">${data.import}</span></p>
+                 <p class="tooltip_style"><span class="tooltip_left">较大事件</span><span class="tooltip_right">${data.compare}</span></p>
+                 <p class="tooltip_style"><span class="tooltip_left">一般事件</span><span class="tooltip_right">${data.common}</span></p>
+                 <p class="tooltip_style"><span class="tooltip_left">特写事件</span><span class="tooltip_right">${data.specail}</span></p>
+               </div>`
+          }
+        },
+        visualMap: {
+          show:true,
+          left: 26,
+          bottom: 40,
+          showLabel:true,
+          pieces: [
+            {
+              gte: 100,
+              label: ">= 1000",
+              color: "#1f307b"
+            },
+            {
+              gte: 500,
+              lt: 999,
+              label: "500 - 999",
+              color: "#3c57ce"
+            },
+            {
+              gte: 100,
+              lt:499,
+              label: "100 - 499",
+              color: "#6f83db"
+            },
+            {
+              gte: 10,
+              lt: 99,
+              label: "10 - 99",
+              color: "#9face7"
+            },
+            {
+              lt:10,
+              label:'<10',
+              color: "#bcc5ee"
+            }
+          ]
+        },
+        geo: {
+          map: "china",
+          scaleLimit: {
+            min: 1,
+            max: 2
+          },
+          zoom: 1,
+          top: 120,
+          label: {
+            normal: {
+              show:true,
+              fontSize: "14",
+              color: "rgba(0,0,0,0.7)"
+            }
+          },
+          itemStyle: {
+            normal: {
+              borderColor: "rgba(0, 0, 0, 0.2)"
+            },
+            emphasis: {
+              areaColor: "#f2d5ad",
+              shadowOffsetX: 0,
+              shadowOffsetY: 0,
+              borderWidth: 0
+            }
+          }
+        },
+        series: {
+          name: "突发事件",
+          type: "map",
+          geoIndex: 0,
+          data:[],
+          universalTransition: true
+        }
+      }
+      this.barOptions = {
+        xAxis: {
+          type: 'value'
+        },
+        yAxis: {
+          type: 'category',
+          data: this.data.map(item => item.name)
+        },
+        visualMap: {
+          show:true,
+          right: 100,
+          bottom: 100,
+          showLabel:true,
+          pieces: [
+            {
+              gte: 100,
+              label: ">= 1000",
+              color: "#1f307b"
+            },
+            {
+              gte: 500,
+              lt: 999,
+              label: "500 - 999",
+              color: "#3c57ce"
+            },
+            {
+              gte: 100,
+              lt:499,
+              label: "100 - 499",
+              color: "#6f83db"
+            },
+            {
+              gte: 10,
+              lt: 99,
+              label: "10 - 99",
+              color: "#9face7"
+            },
+            {
+              lt:10,
+              label:'<10',
+              color: "#bcc5ee"
+            }
+          ]
+        },
+        series: {
+          type: 'bar',
+          id: 'population',
+          data: this.data.map(item => this.colorMapper(item.value)),
+          universalTransition: true
+        }
+      };
     },
-    //修改echart配制
-    setEchartOption(){
-      this.options.series[0].data = this.dataList
+    colorMapper(value){
+      var color = "#9face7"
+      if(value >= 1000) color = "#1f307b"
+      else if(value >= 500) color = "#3c57ce"
+      else if(value >= 100) color = "#6f83db"
+      return {value: value, itemStyle: {color: color}}
     }
   },
   created() {
-    this.setEchartOption()
   },
   mounted() {
     this.$nextTick(() => {
       this.initEchartMap()
+      this.mapOptions.series.data = this.data
+      this.echarts.setOption(this.mapOptions)
+      this.echarts.on('click', () => {
+        this.currentOption = this.currentOption === this.barOptions ? this.mapOptions : this.barOptions
+        this.echarts.setOption(this.currentOption, true)
+      })
     })
   }
-};
+}
 </script>
 
 <style scoped>
@@ -302,16 +364,4 @@ export default {
         left: 0;
         width:45px;
      }
-</style>
-<style>
-#china_map.tooltip_style{
-  line-height:1.7;
-  overflow: hidden;
-}
-#china_map.tooltip_left{
-  float: left;
-}
-#china_map.tooltip_right{
-  float: right;
-}
 </style>

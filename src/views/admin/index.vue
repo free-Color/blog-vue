@@ -1,6 +1,7 @@
 <template>
 <el-container>
   <el-aside width="200px">
+      <el-page-header @back="goBack" style="color: white;margin: 20px 30px"/>
       <el-menu router default-active="2" class="el-menu-vertical-demo"
       background-color="#545c64"
       text-color="#fff" active-text-color="#ffd04b">
@@ -37,6 +38,9 @@ export default {
     }
   },
   methods: {
+    goBack(){
+      this.$router.push('/main')
+    }
   }
 }
 </script>
