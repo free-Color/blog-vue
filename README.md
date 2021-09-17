@@ -1,4 +1,4 @@
-# elephantblog
+# blog
 
 ## Project setup
 ```
@@ -13,6 +13,11 @@ npm run serve
 ### Compiles and minifies for production
 ```
 npm run build
+```
+### config
+```
+src/api/axios.js
+axios.defaults.baseURL = ''
 ```
 
 ### Lints and fixes files
