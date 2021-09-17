@@ -8,6 +8,9 @@
 <el-aside width="160px">
   <el-menu router class="el-menu-demo" @select="handleSelect"
     background-color="#545c64" text-color="#E4E7ED" active-text-color="#ffd04b">
+    <el-menu-item index="/sittings/analyse">
+      <i class="el-icon-s-grid"/>访问分析
+    </el-menu-item>
     <el-menu-item index="/sittings/account">
       <i class="el-icon-setting"/>账户设置
     </el-menu-item>

@@ -33,7 +33,7 @@
         v-model="input" maxlength="60" show-word-limit>
       </el-input></div>
     <div style="margin: 20px;"></div>
-    <el-button type="primary" @click="makeComment()">提交评论</el-button>
+    <el-button type="primary" @click="makeComment">提交评论</el-button>
     <el-divider/>
 
     <div v-for="(item,index) in comments" :key="index">
@@ -87,7 +87,11 @@ export default{
           userId: sessionStorage.getItem('userId')
         }
       }).then(res => {
-        this.getComment()
+        if(res.data.data == true){
+          this.$message.success('成功评论')
+          this.input = ''
+          this.getComment()
+        }
       })
     },
     responseComment (id) {

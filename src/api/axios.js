@@ -7,7 +7,7 @@ axios.defaults.baseURL = 'http://172.29.3.44:8080'
 axios.defaults.headers.post['Content-Type'] = 'application/json;charset=UTF-8'
 
 axios.interceptors.request.use((config) => {
-    if(config.method === 'post'){
+    if(config.method === 'post' && config.headers.post['Content-Type'] == 'application/json;charset=UTF-8'){
         config.data = JSON.stringify(config.data)
     }
     return config

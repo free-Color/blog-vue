@@ -108,6 +108,9 @@ export default new Router({
         path: '/sittings/collect',
         component: () => import('@/views/sittings/collection')
       }, {
+        path: '/sittings/analyse',
+        component: () => import('@/views/sittings/analyse')
+      }, {
         path: '/sittings/blog',
         component: () => import('@/views/sittings/blog')
       }]

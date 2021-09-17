@@ -184,22 +184,11 @@ export default {
           },
           formatter: (e, t, n) => {
             let data = e.data;
-            //模拟数据
-            data.specialImportant = Math.random()*1000 | 0;
-            data.import = Math.random()*1000 | 0;
-            data.compare = Math.random()*1000 | 0;
-            data.common = Math.random()*1000 | 0;
-            data.specail = Math.random()*1000 | 0;
 
             return `
                <div>
-                 <p><b style="font-size:15px;">${data.name}</b>(2020年第一季度)</p>
-                 <p class="tooltip_style"><span class="tooltip_left">事件总数</span><span class="tooltip_right">${data.value}</span></p>
-                 <p class="tooltip_style"><span class="tooltip_left">特别重大事件</span><span class="tooltip_right">${data.specialImportant}</span></p>
-                 <p class="tooltip_style"><span class="tooltip_left">重大事件</span><span class="tooltip_right">${data.import}</span></p>
-                 <p class="tooltip_style"><span class="tooltip_left">较大事件</span><span class="tooltip_right">${data.compare}</span></p>
-                 <p class="tooltip_style"><span class="tooltip_left">一般事件</span><span class="tooltip_right">${data.common}</span></p>
-                 <p class="tooltip_style"><span class="tooltip_left">特写事件</span><span class="tooltip_right">${data.specail}</span></p>
+                 <p><b style="font-size:15px;">${data.name}</b>(2021年访问量)</p>
+                 <p class="tooltip_style"><span class="tooltip_left">访问总量</span><span class="tooltip_right">${data.value}</span></p>
                </div>`
           }
         },
@@ -343,7 +332,25 @@ export default {
     }
   },
   created() {
-
+    this.$axios.get('/log/findIp')
+        .then(res => {
+      this.data = res.data.data
+      this.data.push({name: "南海诸岛",
+        value: 0,
+        eventTotal:100,
+        specialImportant:10,
+        import:10,
+        compare:10,
+        common:40,
+        specail:20})
+      this.mapOptions.series.data = this.data
+      this.data.sort((a, b) => a.value - b.value)
+      this.barOptions.yAxis.data = this.data.map(item => item.name)
+      this.barOptions.series.data = this.data.map(item => this.colorMapper(item.value))
+      this.currentOption = this.currentOption === this.barOptions ? this.barOptions : this.mapOptions
+      if(this.echarts !==null )
+        this.echarts.setOption(this.currentOption, true)
+    })
   },
   mounted() {
     this.$nextTick(() => {

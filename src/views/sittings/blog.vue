@@ -1,7 +1,8 @@
 <template>
 <el-card>
-  
-  <el-table :data="data" height="600" style="width: 100%" border>
+
+  <span v-if="page.total === 0" style="margin: auto">你尚未发表博客</span>
+  <el-table :data="data" height="600" style="width: 100%" border v-if="page.total !== 0">
       <!-- <el-table-column prop="blogTitle" label="标题" width="180"/> -->
       <el-table-column label="标题" width="180">
         <template slot-scope="scope">
@@ -22,7 +23,7 @@
         </template>
       </el-table-column>
   </el-table>
-  
+
     <div class="div-center" style="margin: 20px 0 0">
       <el-pagination
         @size-change="handleSizeChange"

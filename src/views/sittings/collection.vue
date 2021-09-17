@@ -5,32 +5,32 @@
         <router-link :to="'/blog/' + blog.blogId" style="color: black">
           <h2>{{blog.blogTitle}}</h2>
         </router-link>
-        <el-container>
-          <el-aside width="110px">
-            <el-image style="width: 100px; height: 100px" :src="blog.users.userAvatarAddress" :fit="fit"/>
-            <span>{{blog.users.userAvatarAddress}}</span>
-          </el-aside>
-          <el-main>
-            <span>{{blog.blogSummary}}</span>
-          </el-main>
-        </el-container>
-        <el-row :gutter="20">
-          <el-col :span="6">{{blog.users.userNickname}}</el-col>
-          <el-col :span="10">{{blog.createTime | dateFormat}}</el-col>
-          <el-col :span="2">
-            <i class="el-icon-sunrise-1"/>{{blog.blogStatistics.admireCount}}
-          </el-col>
-          <el-col :span="2">
-            <i class="el-icon-chat-dot-square"/>{{blog.blogStatistics.commentCount}}
-          </el-col>
-          <el-col :span="2">
-            <i class="el-icon-star-off"/>{{blog.blogStatistics.collectCount}}
-          </el-col>
-          <el-col :span="2">
-            <i class="el-icon-view"/>{{blog.blogStatistics.viewCount}}
-          </el-col>
-          <el-divider/>
-        </el-row>
+<!--        <el-container>-->
+<!--          <el-aside width="110px">-->
+<!--            <el-image style="width: 100px; height: 100px" :src="$image + blog.users.userAvatarAddress" :fit="fit"/>-->
+<!--            <span>{{blog.users.userAvatarAddress}}</span>-->
+<!--          </el-aside>-->
+<!--          <el-main>-->
+<!--            <span>{{blog.blogSummary}}</span>-->
+<!--          </el-main>-->
+<!--        </el-container>-->
+<!--        <el-row :gutter="20">-->
+<!--          <el-col :span="6">{{blog.users.userNickname}}</el-col>-->
+<!--          <el-col :span="10">{{blog.createTime | dateFormat}}</el-col>-->
+<!--          <el-col :span="2">-->
+<!--            <i class="el-icon-sunrise-1"/>{{blog.blogStatistics.admireCount}}-->
+<!--          </el-col>-->
+<!--          <el-col :span="2">-->
+<!--            <i class="el-icon-chat-dot-square"/>{{blog.blogStatistics.commentCount}}-->
+<!--          </el-col>-->
+<!--          <el-col :span="2">-->
+<!--            <i class="el-icon-star-off"/>{{blog.blogStatistics.collectCount}}-->
+<!--          </el-col>-->
+<!--          <el-col :span="2">-->
+<!--            <i class="el-icon-view"/>{{blog.blogStatistics.viewCount}}-->
+<!--          </el-col>-->
+<!--          <el-divider/>-->
+<!--        </el-row>-->
       </div>
       <div class="div-center" style="margin: 20px 0 0">
         <el-pagination
@@ -72,10 +72,12 @@ export default {
       }).then(res => {
         this.blogs = res.data.data.rows
         this.page.total = res.data.data.count
-        for (const blog in this.blogs) {
-          if(blog.users.userAvatarAddress != null)
-            blog.users.userAvatarAddress =
-                this.$image + blog.users.userAvatarAddress
+        for (var i = 0; i < this.blogs.length ; i++){
+          this.$axios.get('/blog/selectOne',{
+            params: {blogId: this.blogs[i].blogId}
+          }).then(response => {
+            this.blogs[i] = response.data.data
+          })
         }
         // this.$message(JSON.stringify(this.blogs[0].users.userAvatarAddress))
       })
