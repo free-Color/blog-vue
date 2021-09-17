@@ -9,17 +9,14 @@
   <div class="div-center">
     {{userInfo.userProfile}}
   </div>
-<!--  <el-row :gutter="20" class="div-center">-->
-<!--    <el-col :offset="6"></el-col>-->
-<!--    <el-col :span="6" :offset="6"><div class="grid-content bg-purple"></div></el-col>-->
-<!--  </el-row>-->
 
-  <el-card class="div-blogs" v-if="blogs != null"><el-divider/>
+  <el-card class="div-blogs" v-if="blogs != null">
     <div v-for="blog in blogs" :key="blog">
       <router-link :to="'/blog/' + blog.blogId" style="color: black">
         <h2>{{blog.blogTitle}}</h2>
       </router-link>
       <span>{{blog.blogSummary}}</span>
+      <div style="margin: 20px"></div>
       <el-row :gutter="20">
         <el-col :span="6">{{blog.users.userNickname}}</el-col>
         <el-col :span="10">{{blog.createTime | dateFormat}}</el-col>
@@ -58,7 +55,12 @@ export default {
   data(){
     return {
       userInfo: {},
-      blogs: null
+      blogs: null,
+      page: {
+        currentPage: 1,
+        limit: 10,
+        total: 100
+      }
     }
   },
   created() {
@@ -67,11 +69,22 @@ export default {
     }).then(res => {
       this.userInfo = res.data.data
     })
-
+    this.$axios.get('/blog/findByViewCount',{
+      params: {
+        userId: this.$route.params.userId,
+        limit: this.page.limit,
+        page: this.page.currentPage
+      }
+    }).then(res => {
+      this.blogs = res.data.data.rows
+      this.page.total = res.data.data.count
+    })
   }
 }
 </script>
 
 <style scoped>
-
+a{
+  text-decoration: none;
+}
 </style>

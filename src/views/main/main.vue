@@ -8,15 +8,17 @@
       <el-container>
         <el-aside width="110px">
            <el-avatar style="width: 100px; height: 100px" :src="$image+blog.users.userAvatarAddress"
-              shape="square" size="large"/>
+              shape="square" size="large" @click="goUser"/>
 <!--          <span>{{$image+blog.users.userAvatarAddress}}</span>-->
         </el-aside>
-        <el-main>
-          <span>{{blog.blogSummary}}</span>
-        </el-main>
+        <el-main><span>{{blog.blogSummary}}</span></el-main>
       </el-container>
       <el-row :gutter="20">
-        <el-col :span="6">{{blog.users.userNickname}}</el-col>
+        <el-col :span="6">
+          <router-link :to="'/user/' + blog.users.userId" style="color: black">
+          {{blog.users.userNickname}}
+          </router-link>
+        </el-col>
         <el-col :span="10">{{blog.createTime | dateFormat}}</el-col>
         <el-col :span="2">
           <i class="iconfont icon-dianzan1"/>{{blog.blogStatistics.admireCount}}
@@ -101,12 +103,15 @@ export default {
         }).then(res => {
           this.blogs = res.data.data.rows
           this.page.total = res.data.data.count
-          for (let blog in this.blogs) {
-            if(blog.users.userAvatarAddress != null)
-              blog.users.userAvatarAddress =
-                  this.$image + blog.users.userAvatarAddress
-          }
+          // for (let blog in this.blogs) {
+          //   if(blog.users.userAvatarAddress != null)
+          //     blog.users.userAvatarAddress =
+          //         this.$image + blog.users.userAvatarAddress
+          // }
         })
+      },
+      goUser(userId){
+        this.$message(JSON.stringify(userId))
       },
       handleCurrentChange(page){
         this.page.currentPage = page
