@@ -135,10 +135,6 @@ export default {
 </script>
 
 <style scoped>
-.div-blogs{
-  width: 1000px;
-  margin: auto;
-}
 a{
   text-decoration: none;
 }

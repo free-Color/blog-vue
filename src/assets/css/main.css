@@ -27,3 +27,7 @@ html,body,#app{
   color: #606266;
   background-color: #ffffff;
 }
+.div-blogs{
+  width: 1000px;
+  margin: auto;
+}
