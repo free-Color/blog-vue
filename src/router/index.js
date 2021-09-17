@@ -27,9 +27,9 @@ export default new Router({
       component: () => import('@/views/admin'),
       redirect: '/admin/analyse',
       beforeEnter: (to, from, next) => {
-        next()
-        // if(JSON.parse(sessionStorage.getItem('userInfo')).roleId=='1')next()
-        // else next('/main')
+        var val = sessionStorage.getItem('userInfo')
+        if(val != undefined && JSON.stringify(val).roleId == '1' )next()
+        else next('/main')
       },
       children: [{
         path: '/admin/log',
@@ -91,7 +91,7 @@ export default new Router({
       name: 'sittings',
       component: () => import('@/views/sittings'),
       meta: { requireAuth: true },
-      redirect: '/sittings/account',
+      redirect: '/sittings/analyse',
       children: [{
         path: '/sittings/account',
         component: () => import('@/views/sittings/account')
@@ -114,6 +114,10 @@ export default new Router({
         path: '/sittings/blog',
         component: () => import('@/views/sittings/blog')
       }]
+    },
+    {
+      path: '*',
+      redirect: '/main'
     }
   ]
 })

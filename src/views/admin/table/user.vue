@@ -8,8 +8,8 @@
       <el-button type="primary" @click="onSubmit">查询</el-button>
     </el-form-item>
   </el-form>
-  <div style="width: 100%"><div class="div-center" @selection-change="handleSelectionChange">
-    <el-table :data="data" height="500" style="width: 100%">
+  <div style="width: 100%"><div class="div-center">
+    <el-table :data="data" height="500" style="width: 100%"  @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55"/>
       <el-table-column prop="userNickname" label="昵称" width="180" align="center"/>
       <el-table-column prop="userProfile" label="个人简介" width="180"/>
@@ -111,18 +111,19 @@ export default {
       this.table.selection.forEach((value) => {
         selectionId.push(value.userId)
       })
+      this.$message(JSON.stringify(selectionId))
       this.$axios({
-        method: 'get',
+        method: 'post',
         url: '/user/banUser',
-        data: {
-          userIds: JSON.stringify(selectionId)
-        }
+        data: selectionId
       }).then(res => {
-        var selectionId = []
-        this.table.selection.forEach((value) => {
-          selectionId.push(value.userNickname)
-        })
-        this.$message.success('已封禁用户' + JSON.stringify(selectionId))
+        if(res.data.data == true){
+          var selectionId = []
+          this.table.selection.forEach((value) => {
+            selectionId.push(value.userNickname)
+          })
+          this.$message.success('已封禁用户' + JSON.stringify(selectionId))
+        }
       })
     }
   },

@@ -119,13 +119,16 @@ export default {
         url: '/blog/removeBatch',
         data: selectionId
       }).then(res => {
-        var selectionId = []
-        this.selection.forEach((value) => {
-          selectionId.push(value.blogTitle)
-        })
-        this.$message.success('已封禁博客' + JSON.stringify(selectionId))
+        if(res.data.data == true){
+          this.onSubmit()
+          var selectionId = []
+          this.selection.forEach((value) => {
+            selectionId.push(value.blogTitle)
+          })
+          this.onSubmit()
+          this.$message.success('已封禁博客' + JSON.stringify(selectionId))
+        }
       })
-      this.refreshPage()
     },
     recover () {
       var selectionId = []
@@ -137,11 +140,14 @@ export default {
         url: '/blog/recoverBatch',
         data: selectionId
       }).then(res => {
-        var selectionId = []
-        this.selection.forEach((value) => {
-          selectionId.push(value.blogTitle)
-        })
-        this.$message.success('已恢复博客' + JSON.stringify(selectionId))
+        if(res.data.data == true){
+          this.onSubmit()
+          var selectionId = []
+          this.selection.forEach((value) => {
+            selectionId.push(value.blogTitle)
+          })
+          this.$message.success('已恢复博客' + JSON.stringify(selectionId))
+        }
       })
       this.refreshPage()
     },
