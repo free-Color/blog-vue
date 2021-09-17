@@ -8,7 +8,7 @@
       <el-submenu>
         <template slot="title">
           <i class="el-icon-menu"></i>
-          <span slot="title">图表管理</span>
+          <span slot="title">访问分析</span>
         </template>
         <el-menu-item index="/admin/analyse">访问时间分析</el-menu-item>
         <el-menu-item index="/admin/china">访问地点分析</el-menu-item>

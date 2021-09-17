@@ -2,7 +2,9 @@
 <div>
   <el-card class="box-card">
     <div slot="header" class="clearfix">
-      <h2>{{blog.users.userNickname}}</h2>
+      <router-link :to="'/user/' + blog.users.userId" style="color: black">
+        <h2>{{blog.users.userNickname}}</h2>
+      </router-link>
     </div>
     <div class="div-title"><h2>{{blog.blogTitle}}</h2></div>
     <div class="markdown-body" v-html="blog.blogContent"></div>
@@ -201,5 +203,8 @@ export default{
 .box-card{
   width: 1000px;
   margin: auto;
+}
+a{
+  text-decoration: none
 }
 </style>

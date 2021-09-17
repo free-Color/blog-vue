@@ -8,7 +8,7 @@
       <el-container>
         <el-aside width="110px">
            <el-avatar style="width: 100px; height: 100px" :src="$image+blog.users.userAvatarAddress"
-              shape="square" size="large" @click="goUser"/>
+              shape="square" size="large"/>
 <!--          <span>{{$image+blog.users.userAvatarAddress}}</span>-->
         </el-aside>
         <el-main><span>{{blog.blogSummary}}</span></el-main>
@@ -109,9 +109,6 @@ export default {
           //         this.$image + blog.users.userAvatarAddress
           // }
         })
-      },
-      goUser(userId){
-        this.$message(JSON.stringify(userId))
       },
       handleCurrentChange(page){
         this.page.currentPage = page

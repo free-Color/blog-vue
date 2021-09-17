@@ -1,36 +1,28 @@
 <template>
   <div>
-    <el-card class="div-blogs"><el-divider/>
-      <div v-for="blog in blogs" :key="blog">
-        <router-link :to="'/blog/' + blog.blogId" style="color: black">
-          <h2>{{blog.blogTitle}}</h2>
-        </router-link>
-<!--        <el-container>-->
-<!--          <el-aside width="110px">-->
-<!--            <el-image style="width: 100px; height: 100px" :src="$image + blog.users.userAvatarAddress" :fit="fit"/>-->
-<!--            <span>{{blog.users.userAvatarAddress}}</span>-->
-<!--          </el-aside>-->
-<!--          <el-main>-->
-<!--            <span>{{blog.blogSummary}}</span>-->
-<!--          </el-main>-->
-<!--        </el-container>-->
-<!--        <el-row :gutter="20">-->
-<!--          <el-col :span="6">{{blog.users.userNickname}}</el-col>-->
-<!--          <el-col :span="10">{{blog.createTime | dateFormat}}</el-col>-->
-<!--          <el-col :span="2">-->
-<!--            <i class="el-icon-sunrise-1"/>{{blog.blogStatistics.admireCount}}-->
-<!--          </el-col>-->
-<!--          <el-col :span="2">-->
-<!--            <i class="el-icon-chat-dot-square"/>{{blog.blogStatistics.commentCount}}-->
-<!--          </el-col>-->
-<!--          <el-col :span="2">-->
-<!--            <i class="el-icon-star-off"/>{{blog.blogStatistics.collectCount}}-->
-<!--          </el-col>-->
-<!--          <el-col :span="2">-->
-<!--            <i class="el-icon-view"/>{{blog.blogStatistics.viewCount}}-->
-<!--          </el-col>-->
-<!--          <el-divider/>-->
-<!--        </el-row>-->
+    <el-card class="div-blogs">
+
+      <h2>我的收藏:</h2>
+      <div class="div-center" style="margin: 20px 0 0">
+        <el-table :data="blogs" height="500" style="width: 100%" border stripe>
+          <el-table-column label="标题" width="180" align="center">
+            <template slot-scope="scope">
+              <router-link :to="'/blog/' + scope.row.blog.blogId" style="color: black">
+                {{scope.row.blog.blogTitle}}
+              </router-link>
+            </template>
+          </el-table-column>
+          <el-table-column prop="blog.blogSummary" label="博客简介" width="180" align="center"/>
+          <el-table-column label="收藏时间" width="120" align="center">
+            {{collectDate | dateFormat}}
+          </el-table-column>
+          <el-table-column prop="reason" label="收藏原因" width="250" align="center"/>
+          <el-table-column label="操作" width="120" align="center">
+            <template slot-scope="scope">
+              <el-button @click="click(scope.row.blogId)" type="danger" icon="el-icon-delete" plain/>
+            </template>
+          </el-table-column>
+        </el-table>
       </div>
       <div class="div-center" style="margin: 20px 0 0">
         <el-pagination
@@ -39,6 +31,7 @@
             :current-page.sync="page.currentPage"
             :page-sizes="[10, 20, 30, 40]"
             :page-size="page.limit"
+            :hide-on-single-page="page.total < page.limit"
             layout="total, sizes, prev, pager, next, jumper"
             :total="page.total">
         </el-pagination>
@@ -72,13 +65,7 @@ export default {
       }).then(res => {
         this.blogs = res.data.data.rows
         this.page.total = res.data.data.count
-        for (var i = 0; i < this.blogs.length ; i++){
-          this.$axios.get('/blog/selectOne',{
-            params: {blogId: this.blogs[i].blogId}
-          }).then(response => {
-            this.blogs[i] = response.data.data
-          })
-        }
+        this.blogs.forEach(item => item.flag = true)
         // this.$message(JSON.stringify(this.blogs[0].users.userAvatarAddress))
       })
     },
@@ -92,6 +79,9 @@ export default {
       this.page.currentPage = 1
       this.page.limit = val
       this.getPage()
+    },
+    click(id){
+      this.$message(JSON.stringify(id))
     }
   },
   created () {

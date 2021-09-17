@@ -28,7 +28,7 @@ export default new Router({
       redirect: '/admin/analyse',
       beforeEnter: (to, from, next) => {
         var val = sessionStorage.getItem('userInfo')
-        if(val != undefined && JSON.stringify(val).roleId == '1' )next()
+        if(val != undefined && JSON.parse(val).roleId == '1' )next()
         else next('/main')
       },
       children: [{

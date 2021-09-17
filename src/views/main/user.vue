@@ -4,10 +4,14 @@
     <el-avatar :size="100" :src="$image + userInfo.userAvatarAddress"></el-avatar>
   </div>
   <div class="div-center">
-    <span>{{userInfo.userNickname}}</span>
+    <h2>{{userInfo.userNickname}}</h2>
   </div>
   <div class="div-center">
     {{userInfo.userProfile}}
+  </div>
+  <div class="div-center">
+    <el-button @click="click" type="text" v-if="!fanflag">+关注</el-button>
+    <span v-else>关注成功</span>
   </div>
 
   <el-card class="div-blogs" v-if="blogs != null">
@@ -60,7 +64,23 @@ export default {
         currentPage: 1,
         limit: 10,
         total: 100
-      }
+      },
+      fanflag: false
+    }
+  },
+  methods: {
+    click(){
+      this.$axios({
+        method: 'post',
+        url: '/user/follow',
+        params: {
+          followerId: sessionStorage.getItem('userId'),
+          userId: this.userInfo.userId
+        }
+      }).then(res => {
+        if(res.data.data == true)
+          this.$message.success('关注成功')
+      })
     }
   },
   created() {
@@ -68,6 +88,14 @@ export default {
       params: {userId: this.$route.params.userId}
     }).then(res => {
       this.userInfo = res.data.data
+      this.$axios({
+        method: 'post',
+        url: '/user/isFollow',
+        params: {
+          followerId: sessionStorage.getItem('userId'),
+          userId: this.userInfo.userId
+        }
+      }).then(res => this.fanflag = res.data.data == true)
     })
     this.$axios.get('/blog/findByViewCount',{
       params: {
